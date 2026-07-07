@@ -16,9 +16,10 @@ function Login() {
     const handlesubmit = async (e) => {
         e.preventDefault(); //Evite le rechargement de la page
         console.log({ email, password });
+        console.log('Séquence 1 : Test API');
         //Appel API
-        try {
-            const result = await post('login', { email, password }) //Mettre url de l'api et les données à soumettres
+        try { 
+            const result = await post('api/users/login', { email, password }) //Mettre url de l'api et les données à soumettres
             console.log(result);
             setToken(result.data.accessToken); //Pour stocker une donnée
             navigate('/tasks');
