@@ -6,7 +6,7 @@ function Task({ task, onUpdate }) {
     const token = localStorage.getItem('token');
     //Supprimer une tâche
     const deleteTask = async () => {
-        await axios.delete('http://localhost:3000/tasks/' + task.id, {
+        await axios.delete('http://localhost:3000/api/task/' + task.id, {
             headers: { Authorization: 'Bearer ' + token }
         });
         onUpdate();
@@ -15,7 +15,7 @@ function Task({ task, onUpdate }) {
     //Marquer une tâche comme fini
     const markAsFinished = async () => {
 
-        await axios.patch('http://localhost:3000/tasks/' + task.id, { status: 'done' }, {
+        await axios.patch('http://localhost:3000/api/task/' + task.id, { status: 'done' }, {
             headers: { Authorization: 'Bearer ' + token }
         });
         onUpdate();

@@ -21,8 +21,10 @@ function Login() {
         try { 
             const result = await post('api/users/login', { email, password }) //Mettre url de l'api et les données à soumettres
             console.log(result);
-            setToken(result.data.accessToken); //Pour stocker une donnée
+            setToken(result.data.token); //Pour stocker une donnée
+            console.log("Structure complète de la réponse :", result.data);
             navigate('/tasks');
+            console.log('redirection vers pages tasks')
         } catch (err) {
             console.log(err)
             if (err.status == 400)
