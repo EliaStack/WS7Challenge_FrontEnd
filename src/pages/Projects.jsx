@@ -1,0 +1,73 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Project from "../components/Project";
+import { get } from "../services/api";
+import { useAuth } from "../context/AuthContext";
+
+function Projects() {
+
+    const { token } = useAuth();
+    const [projects, setProjects] = useState([]);
+    const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
+
+    const fetchProjects = async (page = 1) => {
+        console.log('project.jsx : 3')
+        try {
+            console.log('project.jsx : 4')
+
+            const result = await get(`api/projet/projectUser?page=${page}`);
+            console.log("Données complètes reçues de l'API :", result.data);
+            console.log('project.jsx : 5')
+            setProjects(result.data.projects);
+            setPagination({
+                page: page,
+                totalPages: result.data.totalPages
+            });
+        } catch (error) {
+            console.error("Erreur lors de la récupération :", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchProjects();
+    }, []);
+
+    return (
+        <div>
+            <div>
+                <h2>Mes projets</h2>
+                <Link className="inline-block mb-4 text-blue-600 underline" to="/create">
+                    + Nouveau projet
+                </Link>
+
+                {projects.map(project => (
+                    <Project project={project} key={project.id} onUpdate={() => fetchProjects(pagination.page)} />
+                ))}
+            </div>
+
+            {/*PAGINATION*/}
+            <div className="flex gap-4 mt-6 items-center">
+                <button
+                    disabled={pagination.page === 1}
+                    onClick={() => fetchProjects(pagination.page - 1)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+                >
+                    Précédent
+                </button>
+
+                <span>Page {pagination.page} sur {pagination.totalPages}</span>
+
+                <button
+                    disabled={pagination.page === pagination.totalPages}
+                    onClick={() => fetchProjects(pagination.page + 1)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+                >
+                    Suivant
+                </button>
+
+            </div>
+        </div>
+    );
+}
+
+export default Projects;

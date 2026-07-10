@@ -23,8 +23,8 @@ function Login() {
             console.log(result);
             setToken(result.data.token); //Pour stocker une donnée
             console.log("Structure complète de la réponse :", result.data);
-            navigate('/tasks');
-            console.log('redirection vers pages tasks')
+            navigate('/projects');
+            console.log('redirection vers pages projet')
         } catch (err) {
             console.log(err)
             if (err.status == 400)
