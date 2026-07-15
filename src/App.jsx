@@ -8,10 +8,11 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Task from './pages/Tasks'
 import Project from './pages/Projects'
-import CreatTask from './pages/CreateTask'
+import CreateTask from './pages/CreateTask'
 import EditTask from './pages/EditTask'
 import PrivateRoute from './PrivateRoute'
 import Tags from './pages/Tags'
+import CreateTag from './pages/CreateTag'
 
 
 
@@ -28,9 +29,10 @@ function App() {
             <Route path='/register' element={<Register></Register>}></Route>
             <Route path='/projects' element={<PrivateRoute><Project></Project></PrivateRoute>}></Route>
             <Route path='/tasks' element={<PrivateRoute><Task></Task></PrivateRoute>}></Route>
-            <Route path='/create' element={<PrivateRoute><CreatTask></CreatTask></PrivateRoute>}></Route>
+            <Route path='/createTask' element={<PrivateRoute><CreateTask></CreateTask></PrivateRoute>}></Route>
             <Route path='/edit/:id' element={<PrivateRoute><EditTask></EditTask></PrivateRoute>}></Route>
             <Route path='/tags' element={<PrivateRoute><Tags></Tags></PrivateRoute>}> </Route>
+            <Route path='/createTag' element={<PrivateRoute><CreateTask></CreateTask></PrivateRoute>}></Route>
           </Routes>
         </main>
         <Footer></Footer>

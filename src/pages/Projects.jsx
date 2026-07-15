@@ -5,7 +5,6 @@ import { get } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
 function Projects() {
-
     const { token } = useAuth();
     const [projects, setProjects] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
@@ -32,6 +31,7 @@ function Projects() {
         fetchProjects();
     }, []);
 
+    
     return (
         <div>
             <div>

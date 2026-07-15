@@ -12,6 +12,7 @@ function Tasks() {
     const location = useLocation();
     // On extrait le projectId envoyé via le state du Link
     const projectId = location.state?.projectId;
+    const assigneeId = location.state?.assigneeId;
     const [tasks, setTasks] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
 
@@ -54,7 +55,7 @@ function Tasks() {
 
             console.log('fetchTags : Récup data OK');
             setTags(result.data.tags);
-            setPagination(result.data.pagination);
+            setTagsPagination(result.data.pagination);
         } catch (error) {
             console.error("Erreur lors de la récupération :", error);
         }
@@ -67,85 +68,92 @@ function Tasks() {
             fetchTags();
         }
     }, [projectId]);
+    console.log("projectId Tasks =", projectId);
+    console.log("assigneeId Tasks =", assigneeId);
+    console.log('user', localStorage.getItem('userId'));
 
     return (
         <div>
-            {/*TASKS*/}
-            <div>
+            <div className="flex gap-8">
+                {/*TASKS*/}
                 <div>
-                    <h2>Mes Tâches</h2>
-                    <Link className="inline-block mb-4 text-blue-600 underline" to="/create">
-                        + Nouvelle tâche
-                    </Link>
-                    {tasks.map((task) => (
-                        <Task key={task.id} task={task} onUpdate={() => fetchTasks(pagination.page)} />
-                    ))}
+                    <div className="flex-1 pr-6 border-r border-gray-300">
+                        <h2>Mes Tâches :</h2>
+                        <Link className="inline-block mb-4 text-blue-600 underline" to="/createTask">
+                            + Nouvelle tâche
+                        </Link>
+                        {tasks.map((task) => (
+                            <Task key={task.id} task={task} onUpdate={() => fetchTasks(pagination.page)} />
+                        ))}
+                    </div>
+
+                    {/*PAGINATION TASKS*/}
+                    <div className="flex justify-center items-center gap-4 mt-6">
+                        <button
+                            disabled={pagination.page === 1}
+                            onClick={() => fetchTasks(pagination.page - 1)}
+                            className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+                        >
+                            Précédent
+                        </button>
+
+                        <span>Page {pagination.page} sur {pagination.totalPages}</span>
+
+                        <button
+                            disabled={pagination.page === pagination.totalPages}
+                            onClick={() => fetchTasks(pagination.page + 1)}
+                            className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+                        >
+                            Suivant
+                        </button>
+                    </div>
                 </div>
 
-                {/*PAGINATION TASKS*/}
-                <div className="flex gap-4 mt-6 items-center">
-                    <button
-                        disabled={pagination.page === 1}
-                        onClick={() => fetchTasks(pagination.page - 1)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-                    >
-                        Précédent
-                    </button>
+                {/*TAGS*/}
+                <div className="w-[400px] pl-6">
+                    <div>
+                        <h2>Commentaire du projet :</h2>
+                        <Link className="inline-block mb-4 text-blue-600 underline" to="/createTag">
+                            + Nouveau commentaire
+                        </Link>
+                        {tags.map((tag) => (
+                            <Tag key={tag.id} tag={tag} onUpdate={() => fetchTags(tagsPagination.page)} />
+                        ))}
+                    </div>
 
-                    <span>Page {pagination.page} sur {pagination.totalPages}</span>
 
-                    <button
-                        disabled={pagination.page === pagination.totalPages}
-                        onClick={() => fetchTasks(pagination.page + 1)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-                    >
-                        Suivant
-                    </button>
+                    {/*PAGINATION TAGS*/}
+                    <div className="flex justify-center items-center gap-4 mt-6">
+                        <button
+                            disabled={tagsPagination.page === 1}
+                            onClick={() => fetchTags(tagsPagination.page - 1)}
+                            className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+                        >
+                            Précédent
+                        </button>
+
+                        <span>Page {tagsPagination.page} sur {tagsPagination.totalPages}</span>
+
+                        <button
+                            disabled={tagsPagination.page === tagsPagination.totalPages}
+                            onClick={() => fetchTags(tagsPagination.page + 1)}
+                            className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
+                        >
+                            Suivant
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <Link className="inline-block mb-4 text-blue-600 underline" to="/projects">
-                        retour
-                    </Link>
-                </div>
+
             </div>
-            {/*TAGS*/}
-            {/*TAGS*/}
-            <div className="mt-12 border-t pt-8">
-                <div>
-                    <h2>Commentaires du projet:</h2>
-                    <Link className="inline-block mb-4 text-blue-600 underline" to="/tags">
-                        Voir tous les tags
-                    </Link>
-                    {tags.map((tag) => (
-                        <Tag key={tag.id} tag={tag} onUpdate={() => fetchTags(tagsPagination.page)} />
-                    ))}
-                </div>
-
-
-                {/*PAGINATION TAGS*/}
-                <div className="flex gap-4 mt-6 items-center">
-                    <button
-                        disabled={tagsPagination.page === 1}
-                        onClick={() => fetchTags(tagsPagination.page - 1)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-                    >
-                        Précédent
-                    </button>
-
-                    <span>Page {tagsPagination.page} sur {tagsPagination.totalPages}</span>
-
-                    <button
-                        disabled={tagsPagination.page === tagsPagination.totalPages}
-                        onClick={() => fetchTags(tagsPagination.page + 1)}
-                        className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-                    >
-                        Suivant
-                    </button>
-                </div>
+            <div className="flex justify-center mt-8">
+                <Link
+                    to="/projects"
+                    className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-3 rounded-lg font-semibold transition shadow-sm"
+                >
+                    ← Retour aux projets
+                </Link>
             </div>
-
         </div>
-
     );
 }
 

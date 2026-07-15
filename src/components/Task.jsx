@@ -22,7 +22,7 @@ function Task({ task, onUpdate }) {
     }
     console.log("Objet task reçu :", task);
     return (
-        <div className="bg-white p-5 rounded-xl border border-gray-200 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center">
+        <div className="bg-white p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center">
 
             {/* Colonne gauche */}
             <div className="flex-1">
@@ -49,7 +49,7 @@ function Task({ task, onUpdate }) {
 
                     {task.tags && task.tags.map((tag, idx) => (
                         <p key={`tag-${idx}`} className="bg-gray-50 p-0 rounded-lg border border-gray-100 text-sm italic text-gray-700">
-                            • Tag : {tag.name || 'Nom du tag inconnu'}
+                            • {tag.name || 'Nom du tag inconnu'}
                         </p>
                     ))}
 
@@ -74,7 +74,7 @@ function Task({ task, onUpdate }) {
                 <div className="flex flex-col text-right text-xs">
                     <span className="font-bold text-black uppercase tracking-wide">Responsable :</span> 
                     <span className="text-sm font-semibold text-gray-800 mb-4">{task.assignee ? `${task.assignee.firstName} ${task.assignee.lastName}`: 'Personne'}</span>
-                    <span className="font-bold text-gray-400 uppercase">ID : {task.project || 'N/A'}</span>
+                    {/*<span className="font-bold text-gray-400 uppercase">ID : {task.project || 'N/A'}</span>*/}
                 </div>
             </div>
         </div>

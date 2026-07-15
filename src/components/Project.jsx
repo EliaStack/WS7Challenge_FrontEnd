@@ -22,7 +22,7 @@ function Project({ project, onUpdate }) {
     }
 
     return (
-<div className="bg-gray-50 p-5 rounded-xl border border-gray-200 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center">
+<div className="bg-gray-50 p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center">
 
     {/* Colonne gauche : Remplacée par un Link pour le clic */}
     <Link to= "/tasks" state={{ projectId: project._id }} className="flex-1 block hover:bg-gray-100/50 p-2 rounded-lg transition-colors cursor-pointer">

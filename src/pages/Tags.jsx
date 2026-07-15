@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Tag from "../components/Tag";
-import { get } from "../services/api";
+import { patch } from "../services/api";
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
 
@@ -35,32 +35,6 @@ function Tags() {
                 {tags.map(tag => (
                     <Tag tag={tag} key={tag.id} onUpdate={() => fetchTags(pagination.page)} />
                 ))}
-            </div>
-
-            {/*PAGINATION*/}
-            <div className="flex gap-4 mt-6 items-center">
-                <button
-                    disabled={pagination.page === 1}
-                    onClick={() => fetchTags(pagination.page - 1)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-                >
-                    Précédent
-                </button>
-
-                <span>Page {pagination.page} sur {pagination.totalPages}</span>
-
-                <button
-                    disabled={pagination.page === pagination.totalPages}
-                    onClick={() => fetchTags(pagination.page + 1)}
-                    className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-                >
-                    Suivant
-                </button>
-            </div>
-            <div>
-                <Link className="inline-block mb-4 text-blue-600 underline" to="/projects">
-                    retour
-                </Link>
             </div>
         </div>
     );
