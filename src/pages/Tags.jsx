@@ -10,41 +10,19 @@ function Tags() {
     const location = useLocation();
     // On extrait le projectId envoyé via le state du Link
     const projectId = location.state?.projectId;
-    const [tags, setTags] = useState([]);
-    const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
 
-    const fetchTags = async (page = 1) => {
-        try {
-            // Vérification de sécurité : si on n'a pas de projectId, on arrête
-            if (!projectId) {
-                console.error("Aucun projectId trouvé dans le state.");
-                return;
-            }
 
-            // On récupére les commentaires relatif au projet
-            const result = await get(`/api/tags?page=${page}`);
-
-            setTags(result.data.tags);
-            setPagination(result.data.pagination);
-        } catch (error) {
-            console.error("Erreur lors de la récupération :", error);
-        }
-    };
 
     //Créer une tâche
     const CreateTag = async () => {
+        console.log('tags.jsx-createTag 1');
         await axios.patch('http://localhost:3000/api/tags/tagCreate' + tag.id, {
             headers: { Authorization: 'Bearer ' + token }
         });
+        console.log('tags.jsx-createTag 2');
         onUpdate();
     }
 
-    // N'oubliez pas d'appeler fetchTags dans le useEffect quand projectId change
-    useEffect(() => {
-        if (projectId) {
-            fetchTags();
-        }
-    }, [projectId]);
 
     return (
         <div>

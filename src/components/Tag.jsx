@@ -1,23 +1,26 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { deleteMany } from "../../../backend/models/user";
 
 
 function Tag({ tag, onUpdate }) {
     const token = localStorage.getItem('token');
     //Supprimer une tâche
     const deleteTag = async () => {
+        console.log('tag.jsx-deleteTag 1');
         await axios.delete('http://localhost:3000/api/tags/' + tag.id, {
             headers: { Authorization: 'Bearer ' + token }
         });
+        console.log('tag.jsx-deleteTag 2');
         onUpdate();
     };
 
     //Modifier une tâche
     const modifyTag = async () => {
+        console.log('tag.jsx-modifyTag 1');
         await axios.patch('http://localhost:3000/api/tags/' + tag.id, {
             headers: { Authorization: 'Bearer ' + token }
         });
+        console.log('tag.jsx-modifyTag 2');
         onUpdate();
     }
 

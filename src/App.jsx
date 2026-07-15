@@ -11,6 +11,7 @@ import Project from './pages/Projects'
 import CreatTask from './pages/CreateTask'
 import EditTask from './pages/EditTask'
 import PrivateRoute from './PrivateRoute'
+import Tags from './pages/Tags'
 
 
 
@@ -29,6 +30,7 @@ function App() {
             <Route path='/tasks' element={<PrivateRoute><Task></Task></PrivateRoute>}></Route>
             <Route path='/create' element={<PrivateRoute><CreatTask></CreatTask></PrivateRoute>}></Route>
             <Route path='/edit/:id' element={<PrivateRoute><EditTask></EditTask></PrivateRoute>}></Route>
+            <Route path='/tags' element={<PrivateRoute><Tags></Tags></PrivateRoute>}> </Route>
           </Routes>
         </main>
         <Footer></Footer>
