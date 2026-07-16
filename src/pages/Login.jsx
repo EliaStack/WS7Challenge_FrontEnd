@@ -7,7 +7,7 @@ import { post } from "../services/api";
 
 function Login() {
 
-    const {setToken} = useAuth();
+    const { setToken } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(false); //Gestion des erreurs
@@ -18,11 +18,17 @@ function Login() {
         console.log({ email, password });
         console.log('Séquence 1 : Test API');
         //Appel API
-        try { 
+        try {
             const result = await post('api/users/login', { email, password }) //Mettre url de l'api et les données à soumettres
             console.log(result);
             setToken(result.data.token); //Pour stocker une donnée
             console.log("Structure complète de la réponse :", result.data);
+            //On récupère le token et le user connecté
+            setToken(result.data.token);
+            localStorage.setItem('userId', result.data.userId);
+            console.log("userId =", result.data.userId);
+            console.log("token =", result.data.token);
+
             navigate('/projects');
             console.log('redirection vers pages projet')
         } catch (err) {

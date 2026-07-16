@@ -13,6 +13,10 @@ function Tasks() {
     // On extrait le projectId envoyé via le state du Link
     const projectId = location.state?.projectId;
     const assigneeId = location.state?.assigneeId;
+
+    const userId = localStorage.getItem('userId');
+    console.log("userId =", userId);
+
     const [tasks, setTasks] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
 
@@ -68,9 +72,7 @@ function Tasks() {
             fetchTags();
         }
     }, [projectId]);
-    console.log("projectId Tasks =", projectId);
-    console.log("assigneeId Tasks =", assigneeId);
-    console.log('user', localStorage.getItem('userId'));
+
 
     return (
         <div>
@@ -79,7 +81,7 @@ function Tasks() {
                 <div>
                     <div className="flex-1 pr-6 border-r border-gray-300">
                         <h2>Mes Tâches :</h2>
-                        <Link className="inline-block mb-4 text-blue-600 underline" to="/createTask">
+                        <Link className="inline-block mb-4 text-blue-600 underline" to="/createTask" state={{projectId: projectId,assigneeId: userId}}>
                             + Nouvelle tâche
                         </Link>
                         {tasks.map((task) => (

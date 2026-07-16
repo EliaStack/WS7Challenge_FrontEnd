@@ -19,18 +19,24 @@ function CreatTask() {
     const [assignee, setAssignee] = useState(assigneeId);
     const [comment, setComment] = useState('');
 
+    console.log("projectId =", projectId);
+    console.log("assigneeId =", assigneeId);
 
     const handleSubmit = async (e) => {
         console.log('CreateTask-1')
         e.preventDefault(); //Evite le rechargement de la page
         //Appel API
         console.log('CreateTask-2')
-        console.log("projectId Tasks =", projectId);
-        console.log("assigneeId Tasks =", assigneeId);
+
         await post('api/task/taskCreate', { title, description, dueAt, priority, status, project, assignee, comment })
         console.log('CreateTask-3')
-
-        navigate('/tasks');
+        
+        //Retour vers la page tasks mais en gardant l'id du projet pour que les tâches s'affiche
+        navigate('/tasks', {
+            state: {
+                projectId: project
+            }
+        });
     }
 
     return (
@@ -60,7 +66,7 @@ function CreatTask() {
             <label>Assigné à :</label>
             <input readOnly placeholder="Assigned" value={assignee} onChange={(e) => setAssignee(e.target.value)} />
             <label>Commentaires :</label>
-            <textarea placeholder="Description" value={comment} onChange={(e) => setTag(e.target.value)}></textarea>
+            <textarea placeholder="Description" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
 
             <button>Créer</button>
         </form>
