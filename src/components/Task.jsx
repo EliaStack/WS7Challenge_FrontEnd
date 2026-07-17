@@ -20,7 +20,7 @@ function Task({ task, onUpdate }) {
         });
         onUpdate();
     }
-    console.log("Objet task reçu :", task);
+
     return (
         <div className="bg-white p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center">
 

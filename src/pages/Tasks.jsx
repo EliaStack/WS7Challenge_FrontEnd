@@ -12,10 +12,13 @@ function Tasks() {
     const location = useLocation();
     // On extrait le projectId envoyé via le state du Link
     const projectId = location.state?.projectId;
-    const assigneeId = location.state?.assigneeId;
+    const projectTitle = location.state?.projectTitle;
+    //const assigneeId = location.state?.assigneeId;
+    //const assigneeName = location.state?.assigneeName;
 
-    const userId = localStorage.getItem('userId');
-    console.log("userId =", userId);
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log('utilisateur',user);
+    console.log('titre du projet : ',projectTitle)
 
     const [tasks, setTasks] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
@@ -26,14 +29,11 @@ function Tasks() {
 
     const fetchTasks = async (page = 1) => {
         try {
-            console.log('fetchtasks 1');
             // Vérification de sécurité : si on n'a pas de projectId, on arrête
             if (!projectId) {
-                console.log('fetchtasks 2');
                 console.error("Aucun projectId trouvé dans le state.");
                 return;
             }
-            console.log('fetchtasks 3');
             // On utilise ici la variable projectId récupérée
             const result = await get(`/api/task/taskUser/${projectId}?page=${page}`);
             console.log('fetchtasks : Récup data OK');
@@ -46,14 +46,11 @@ function Tasks() {
 
     const fetchTags = async (page = 1) => {
         try {
-            console.log('fetchTags 1');
             // Vérification de sécurité : si on n'a pas de projectId, on arrête
             if (!projectId) {
-                console.log('fetchTags 2');
                 console.error("Aucun projectId trouvé dans le state.");
                 return;
             }
-            console.log('fetchTags 3');
             // On récupére les commentaires relatif au projet
             const result = await get(`/api/tags/${projectId}?page=${page}`);
 
@@ -73,6 +70,7 @@ function Tasks() {
         }
     }, [projectId]);
 
+    console.log('nom du projet',projectTitle);
 
     return (
         <div>
@@ -81,7 +79,11 @@ function Tasks() {
                 <div>
                     <div className="flex-1 pr-6 border-r border-gray-300">
                         <h2>Mes Tâches :</h2>
-                        <Link className="inline-block mb-4 text-blue-600 underline" to="/createTask" state={{projectId: projectId,assigneeId: userId}}>
+                        <Link className="inline-block mb-4 text-blue-600 underline" to="/createTask" state={{
+                            projectId: projectId,
+                            projectTitle: projectTitle,
+                            assigneeId: user._id,
+                            assigneeName: `${user.firstName} ${user.lastName}`}}>
                             + Nouvelle tâche
                         </Link>
                         {tasks.map((task) => (

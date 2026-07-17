@@ -10,13 +10,9 @@ function Projects() {
     const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
 
     const fetchProjects = async (page = 1) => {
-        console.log('project.jsx : 3')
-        try {
-            console.log('project.jsx : 4')
 
+        try {
             const result = await get(`api/projet/projectUser?page=${page}`);
-            console.log("Données complètes reçues de l'API :", result.data);
-            console.log('project.jsx : 5')
             setProjects(result.data.projects);
             setPagination({
                 page: page,

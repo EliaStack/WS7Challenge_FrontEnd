@@ -16,17 +16,14 @@ function Login() {
     const handlesubmit = async (e) => {
         e.preventDefault(); //Evite le rechargement de la page
         console.log({ email, password });
-        console.log('Séquence 1 : Test API');
         //Appel API
         try {
             const result = await post('api/users/login', { email, password }) //Mettre url de l'api et les données à soumettres
-            console.log(result);
             setToken(result.data.token); //Pour stocker une donnée
-            console.log("Structure complète de la réponse :", result.data);
             //On récupère le token et le user connecté
             setToken(result.data.token);
-            localStorage.setItem('userId', result.data.userId);
-            console.log("userId =", result.data.userId);
+            localStorage.setItem('user',JSON.stringify(result.data.user));
+            console.log("user =", result.data.user);
             console.log("token =", result.data.token);
 
             navigate('/projects');

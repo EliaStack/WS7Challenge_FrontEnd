@@ -9,18 +9,20 @@ function CreatTask() {
     const navigate = useNavigate();
     const location = useLocation();
     const projectId = location.state?.projectId;
+    const projectTitle = location.state?.projectTitle;
     const assigneeId = location.state?.assigneeId;
+    const assigneeName = location.state?.assigneeName;
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [dueAt, setDueAt] = useState('')
     const [priority, setPriority] = useState('Low');
     const [status, setStatus] = useState('open');
-    const [project, setProject] = useState(projectId);
-    const [assignee, setAssignee] = useState(assigneeId);
+    const [project, setProject] = useState('');
+   // const [assignee, setAssignee] = useState(assigneeName);
     const [comment, setComment] = useState('');
 
-    console.log("projectId =", projectId);
-    console.log("assigneeId =", assigneeId);
+    console.log(projectTitle);
+    console.log(assigneeName);
 
     const handleSubmit = async (e) => {
         console.log('CreateTask-1')
@@ -28,13 +30,13 @@ function CreatTask() {
         //Appel API
         console.log('CreateTask-2')
 
-        await post('api/task/taskCreate', { title, description, dueAt, priority, status, project, assignee, comment })
+        await post('api/task/taskCreate', { title, description, dueAt, priority, status,project: projectId,assignee: assigneeId, comment })
         console.log('CreateTask-3')
-        
+
         //Retour vers la page tasks mais en gardant l'id du projet pour que les tâches s'affiche
         navigate('/tasks', {
             state: {
-                projectId: project
+                projectId: projectId
             }
         });
     }
@@ -61,10 +63,11 @@ function CreatTask() {
                 <option value="in_progress">In progress</option>
                 <option value="closed">Closed</option>
             </select>
+            <br></br>
             <label>Projet concerné :</label>
-            <input readOnly placeholder="Project" value={project} onChange={(e) => setProject(e.target.value)} />
+            <input readOnly placeholder="Project" value={projectTitle} onChange={(e) => setProject(e.target.value)} />
             <label>Assigné à :</label>
-            <input readOnly placeholder="Assigned" value={assignee} onChange={(e) => setAssignee(e.target.value)} />
+            <input readOnly placeholder="Assigned" value={assigneeName} onChange={(e) => setAssignee(e.target.value)} />
             <label>Commentaires :</label>
             <textarea placeholder="Description" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
 
