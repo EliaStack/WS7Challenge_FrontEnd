@@ -6,7 +6,7 @@ function Task({ task, onUpdate }) {
     const token = localStorage.getItem('token');
     //Supprimer une tâche
     const deleteTask = async () => {
-        await axios.delete('http://localhost:3000/api/task/' + task.id, {
+        await axios.delete('http://localhost:3000/api/task/' + task._id, {
             headers: { Authorization: 'Bearer ' + token }
         });
         onUpdate();
@@ -15,7 +15,7 @@ function Task({ task, onUpdate }) {
     //Marquer une tâche comme fini
     const markAsFinished = async () => {
 
-        await axios.patch('http://localhost:3000/api/task/' + task.id, { status: 'done' }, {
+        await axios.patch('http://localhost:3000/api/task/' + task._id, { status: 'done' }, {
             headers: { Authorization: 'Bearer ' + token }
         });
         onUpdate();
@@ -28,8 +28,15 @@ function Task({ task, onUpdate }) {
             <div className="flex-1">
                 {/* ... (En-tête et Titre identiques) ... */}
                 <div className="flex items-center gap-2 mb-2">
-                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase ${task.status === 'done' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                        {task.status === 'done' ? 'Terminée' : 'A faire'}
+                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase ${task.status === 'done' || task.status === 'closed'
+                            ? 'bg-green-100 text-green-800'
+                            : task.status === 'in_progress'
+                                ? 'bg-blue-100 text-blue-800'
+                                : 'bg-yellow-100 text-yellow-800'
+                        }`}>
+                        {task.status === 'done' || task.status === 'closed' ? 'Terminée' :
+                            task.status === 'in_progress' ? 'En cours' :
+                                'A faire'}
                     </span>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-1">{task.title}</h3>
@@ -65,15 +72,15 @@ function Task({ task, onUpdate }) {
                 {task.status !== 'done' && (
                     <button className="bg-green-500 text-black hover:bg-green-600 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm" onClick={() => markAsFinished()}>Terminer</button>
                 )}
-                <Link className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center" to={`/edit/${task.id}`}>Modifier</Link>
+                <Link className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center" to={`/edit/${task._id}`}>Modifier</Link>
                 <button className="bg-red-500 text-black hover:bg-red-600 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm" onClick={() => deleteTask()}>Supprimer</button>
             </div>
 
             {/* Colonne droite : Responsable */}
             <div className="flex items-center gap-4 border-l border-gray-300 pl-4 min-w-[150px]">
                 <div className="flex flex-col text-right text-xs">
-                    <span className="font-bold text-black uppercase tracking-wide">Responsable :</span> 
-                    <span className="text-sm font-semibold text-gray-800 mb-4">{task.assignee ? `${task.assignee.firstName} ${task.assignee.lastName}`: 'Personne'}</span>
+                    <span className="font-bold text-black uppercase tracking-wide">Responsable :</span>
+                    <span className="text-sm font-semibold text-gray-800 mb-4">{task.assignee ? `${task.assignee.firstName} ${task.assignee.lastName}` : 'Personne'}</span>
                     {/*<span className="font-bold text-gray-400 uppercase">ID : {task.project || 'N/A'}</span>*/}
                 </div>
             </div>

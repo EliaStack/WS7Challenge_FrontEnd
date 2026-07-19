@@ -7,7 +7,7 @@ function Tag({ tag, onUpdate }) {
     //Supprimer une tâche
     const deleteTag = async () => {
         console.log('tag.jsx-deleteTag 1');
-        await axios.delete('http://localhost:3000/api/tags/' + tag.id, {
+        await axios.delete('http://localhost:3000/api/tags/' + tag._id, {
             headers: { Authorization: 'Bearer ' + token }
         });
         console.log('tag.jsx-deleteTag 2');
@@ -17,7 +17,7 @@ function Tag({ tag, onUpdate }) {
     //Modifier une tâche
     const modifyTag = async () => {
         console.log('tag.jsx-modifyTag 1');
-        await axios.patch('http://localhost:3000/api/tags/' + tag.id, {
+        await axios.patch('http://localhost:3000/api/tags/' + tag._id, {
             headers: { Authorization: 'Bearer ' + token }
         });
         console.log('tag.jsx-modifyTag 2');

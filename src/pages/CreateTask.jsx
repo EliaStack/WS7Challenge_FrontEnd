@@ -18,7 +18,7 @@ function CreatTask() {
     const [priority, setPriority] = useState('Low');
     const [status, setStatus] = useState('open');
     const [project, setProject] = useState('');
-   // const [assignee, setAssignee] = useState(assigneeName);
+    // const [assignee, setAssignee] = useState(assigneeName);
     const [comment, setComment] = useState('');
 
     console.log(projectTitle);
@@ -30,7 +30,7 @@ function CreatTask() {
         //Appel API
         console.log('CreateTask-2')
 
-        await post('api/task/taskCreate', { title, description, dueAt, priority, status,project: projectId,assignee: assigneeId, comment })
+        await post('api/task/taskCreate', { title, description, dueAt, priority, status, project: projectId, assignee: assigneeId, comment })
         console.log('CreateTask-3')
 
         //Retour vers la page tasks mais en gardant l'id du projet pour que les tâches s'affiche
@@ -43,7 +43,9 @@ function CreatTask() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>Créer une tâche</h2>
+            <h2 className="bg-blue-600 text-white text-xl font-semibold px-4 py-2 rounded mb-6 text-center">
+                Créer une tâche
+            </h2>
             <label>Titre de la tâche :</label>
             <input placeholder="Titre" value={title} onChange={(e) => setTitle(e.target.value)} />
             <label>Description de la tâche :</label>
@@ -61,7 +63,6 @@ function CreatTask() {
                 value={status} onChange={(e) => setStatus(e.target.value)} className="border border-gray-300 rounded px-3 py-2">
                 <option value="open">Open</option>
                 <option value="in_progress">In progress</option>
-                <option value="closed">Closed</option>
             </select>
             <br></br>
             <label>Projet concerné :</label>
