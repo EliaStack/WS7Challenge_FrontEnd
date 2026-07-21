@@ -73,6 +73,14 @@ function CreateTask() {
             <textarea placeholder="Description" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
 
             <button>Créer</button>
+            <div className="flex justify-center mt-8">
+                <Link
+                    to="/projects"
+                    className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-3 rounded-lg font-semibold transition shadow-sm"
+                >
+                    ← Retour aux projets
+                </Link>
+            </div>
         </form>
     )
 };

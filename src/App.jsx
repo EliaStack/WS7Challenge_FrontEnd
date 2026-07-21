@@ -35,7 +35,7 @@ function App() {
              <Route path='/editProject/:id' element={<PrivateRoute><EditProject></EditProject></PrivateRoute>}></Route> {/*Pour modifier un projet en cours*/}
             <Route path='/tags' element={<PrivateRoute><Tags></Tags></PrivateRoute>}> </Route>
             <Route path='/createTask' element={<PrivateRoute><CreateTask></CreateTask></PrivateRoute>}></Route>
-            <Route path='/createTag' element={<PrivateRoute><CreateTask></CreateTask></PrivateRoute>}></Route>
+            <Route path='/createTag' element={<PrivateRoute><CreateTag></CreateTag></PrivateRoute>}></Route>
             <Route path='/createProject' element={<PrivateRoute><CreateProject></CreateProject></PrivateRoute>}></Route>
           </Routes>
         </main>

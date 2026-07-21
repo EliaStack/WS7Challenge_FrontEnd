@@ -17,8 +17,8 @@ function Tasks() {
     //const assigneeName = location.state?.assigneeName;
 
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log('utilisateur',user);
-    console.log('titre du projet : ',projectTitle)
+    console.log('utilisateur', user);
+    console.log('titre du projet : ', projectTitle)
 
     const [tasks, setTasks] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
@@ -26,7 +26,7 @@ function Tasks() {
     const [tags, setTags] = useState([]);
     const [tagsPagination, setTagsPagination] = useState({ page: 1, totalPages: 1 });
 
-
+    console.log('id du projet : ', projectId);
     const fetchTasks = async (page = 1) => {
         try {
             // Vérification de sécurité : si on n'a pas de projectId, on arrête
@@ -46,14 +46,17 @@ function Tasks() {
 
     const fetchTags = async (page = 1) => {
         try {
+            console.log('tag1');
             // Vérification de sécurité : si on n'a pas de projectId, on arrête
             if (!projectId) {
                 console.error("Aucun projectId trouvé dans le state.");
                 return;
             }
+            console.log('tag2');
+            console.log('id du projet : ', projectId);
             // On récupére les commentaires relatif au projet
             const result = await get(`/api/tags/${projectId}?page=${page}`);
-
+            console.log('tag3');
             console.log('fetchTags : Récup data OK');
             setTags(result.data.tags);
             setTagsPagination(result.data.pagination);
@@ -70,7 +73,7 @@ function Tasks() {
         }
     }, [projectId]);
 
-    console.log('nom du projet',projectTitle);
+    //  console.log('nom du projet', projectTitle);
 
     return (
         <div>
@@ -83,7 +86,8 @@ function Tasks() {
                             projectId: projectId,
                             projectTitle: projectTitle,
                             assigneeId: user._id,
-                            assigneeName: `${user.firstName} ${user.lastName}`}}>
+                            assigneeName: `${user.firstName} ${user.lastName}`
+                        }}>
                             + Nouvelle tâche
                         </Link>
                         {tasks.map((task) => (
@@ -117,7 +121,10 @@ function Tasks() {
                 <div className="w-[400px] pl-6">
                     <div>
                         <h2>Commentaire du projet :</h2>
-                        <Link className="inline-block mb-4 text-blue-600 underline" to="/createTag">
+                        <Link className="inline-block mb-4 text-blue-600 underline" to="/createTag" state={{
+                            projectId: projectId,
+                            projectTitle: projectTitle,
+                        }}>
                             + Nouveau commentaire
                         </Link>
                         {tags.map((tag) => (

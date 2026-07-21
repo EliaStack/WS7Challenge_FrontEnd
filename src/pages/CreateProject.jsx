@@ -58,7 +58,7 @@ function CreateProject() {
             <label>Date d'échéance :</label>
             <input type="date" value={endAt} onChange={(e) => setEndAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2" />
             <label>Status :</label>
-            <input readOnly placeholder="Titre" value={status} onChange={(e) => setStatus(e.target.value)} />  
+            <input readOnly placeholder="Titre" value={status} onChange={(e) => setStatus(e.target.value)} />
             <label>Créateur :</label>
             <input readOnly placeholder="Créateur du projet" value={assigneeName} onChange={(e) => setAssignee(e.target.value)} />
             <label className="block font-medium mb-1">Membres du projet :</label>
@@ -166,6 +166,14 @@ function CreateProject() {
             <br></br>
 
             <button>Créer</button>
+            <div className="flex justify-center mt-8">
+                <Link
+                    to="/projects"
+                    className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-3 rounded-lg font-semibold transition shadow-sm"
+                >
+                    ← Retour aux projets
+                </Link>
+            </div>
         </form>
     )
 };
