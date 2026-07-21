@@ -47,7 +47,7 @@ function Tag({ tag, onUpdate }) {
 
             {/* Colonne centrale : Boutons */}
             <div className="flex flex-col items-center justify-center gap-2 min-w-[120px]">
-                <button className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center" onClick={() => modifyTag()}>Modifier</button>
+                <Link className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center" to={`/editTag/${tag._id}`} state={{ tag: tag }}>Modifier</Link>
                 <button className="bg-red-500 text-black hover:bg-red-600 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm" onClick={() => deleteTag()}>Supprimer</button>
             </div>
 
