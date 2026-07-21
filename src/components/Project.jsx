@@ -15,20 +15,20 @@ function Project({ project, onUpdate }) {
     //Marquer une tâche comme fini
     const markAsFinished = async () => {
 
-        await axios.patch('http://localhost:3000/api/projet/' + project._id, { status: 'done' }, {
+        await axios.patch('http://localhost:3000/api/projet/' + project._id, { status: 'archivé' }, {
             headers: { Authorization: 'Bearer ' + token }
         });
         onUpdate();
     }
 
     return (
-        <div className="bg-gray-50 p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center">
+        <div key={project._id} className="bg-gray-50 p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center">
 
             {/* Colonne gauche*/}
-            <Link to="/tasks" state={{ projectId: project._id,projectTitle:project.title}} className="flex-1 block hover:bg-gray-100/50 p-2 rounded-lg transition-colors cursor-pointer">
+            <Link to="/tasks" state={{ projectId: project._id, projectTitle: project.title }} className="flex-1 block hover:bg-gray-100/50 p-2 rounded-lg transition-colors cursor-pointer">
                 <div className="flex items-center gap-2 mb-2">
                     <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${project.status === 'Actif' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                        {project.status === 'Actif' ? 'Archivé' : 'A faire'}
+                        {project.status}
                     </span>
                 </div>
 
@@ -36,13 +36,17 @@ function Project({ project, onUpdate }) {
                 <p className="text-sm text-gray-600 mb-4 leading-relaxed">{project.description}</p>
 
                 <div className="text-[11px] text-gray-500 font-bold uppercase tracking-wider">
-                    Démarré le : {project.dueAt ? new Date(project.dueAt).toLocaleDateString() : 'Non défini'}
+                    Démarré le : {project.startAt ? new Date(project.startAt).toLocaleDateString() : 'Non défini'}
+                </div>
+
+                <div className="text-[11px] text-gray-500 font-bold uppercase tracking-wider">
+                    Fin le : {project.endAt ? new Date(project.endAt).toLocaleDateString() : 'Non défini'}
                 </div>
             </Link>
 
             {/* Colonne centrale*/}
             <div className="flex flex-col items-center justify-center gap-2 min-w-[120px]">
-                {project.status !== 'done' && (
+                {project.status !== 'archivé' && (
                     <button
                         className="bg-green-500 text-black hover:bg-green-600 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm"
                         onClick={(e) => { e.stopPropagation(); markAsFinished(); }}
@@ -52,7 +56,8 @@ function Project({ project, onUpdate }) {
                 )}
                 <Link
                     className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center"
-                    to={`/editProject/${project.id}`}
+                    to={`/editProject/${project._id}`}
+                    state = {{project:project}}
                 >
                     Modifier
                 </Link>

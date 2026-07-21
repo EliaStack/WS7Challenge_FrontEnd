@@ -8,18 +8,19 @@ import { get, patch } from "../services/api";
 function EditTask() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { id } = useParams();
+    const project = location.state?.project //Récupère toutes les infos du projet
     const { token } = useAuth();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [startAt, setStartAt] = useState('');
     const [endAt, setEndAt] = useState('');
     const [status, setStatus] = useState('Actif');
-    const [owner, setOwner] = useState('');
-
-    //Récupération de tout les users
-    const [users, setUsers] = useState([]);       // Pour stocker la liste de tous les utilisateurs du site
+    const [owner, setOwner] = useState(`${project.owner.firstName} ${project.owner.lastName}`);
     const [members, setMembers] = useState([]);   // Pour stocker les IDs des membres sélectionnés
+    const [projectId, setProjectId] = useState(location.state?.projectId || '');
+
+
+    const [users, setUsers] = useState([]);       // Pour stocker la liste de tous les utilisateurs du site
     const [searchTerm, setSearchTerm] = useState('');
     //Récupération des users
     useEffect(() => {
@@ -32,29 +33,36 @@ function EditTask() {
             });
     }, []);
 
-
     useEffect(() => {
-        get('api/task/' + id)
+        get('api/projet/' + project._id)
             .then(response => {
                 setTitle(response.data.title);
                 setDescription(response.data.description);
-                setDueAt(response.data.dueAt ? response.data.dueAt.split('T')[0] : '');
-                setPriority(response.data.priority);
+                setStartAt(response.data.startAt ? response.data.startAt.split('T')[0] : '');
+                setEndAt(response.data.endAt ? response.data.endAt.split('T')[0] : '');
                 setStatus(response.data.status);
-                setComment(response.data.comment);
+                //  setOwner(response.data.owner);
+                setMembers(response.data.members)
 
                 if (!projectId) {
                     setProjectId(response.data.project?._id || response.data.project);
                 }
             });
-    }, [id])
+    }, [project._id])
+
+    // Pour afficher le prénom de chaque membre proprement dans la console :
+    if (project?.members) {
+        project.members.forEach((member, index) => {
+            console.log('test 3 -', member.firstName);
+        });
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault(); //Evite le rechargement de la page
         try {
             //Appel API
-            await patch('api/task/' + id, { title, description, startAt, endAt, status, owner: assigneeId, members })
-            navigate('/tasks', {
+            await patch('api/projet/' + project._id, { title, description, startAt, endAt, status, owner: project.owner, members })
+            navigate('/projects', {
                 state: {
                     projectId: projectId
                 }
@@ -79,9 +87,14 @@ function EditTask() {
             <label>Date d'échéance :</label>
             <input type="date" value={endAt} onChange={(e) => setEndAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2" />
             <label>Status :</label>
-            <input readOnly placeholder="Titre" value={status} onChange={(e) => setStatus(e.target.value)} />
+            <select
+                value={status} onChange={(e) => setStatus(e.target.value)} className="border border-gray-300 rounded px-3 py-2">
+                <option value="actif">Actif</option>
+                <option value="archiver">Archivé</option>
+            </select>
+            <br />
             <label>Créateur :</label>
-            <input readOnly placeholder="Créateur du projet" value={assigneeName} onChange={(e) => setAssignee(e.target.value)} />
+            <input readOnly placeholder="Créateur du projet" value={owner} onChange={(e) => setOwner(e.target.value)} />
             <label className="block font-medium mb-1">Membres du projet :</label>
             {/* Affichage des membres : nom/prénom à gauche et petite croix bleue cliquable tout à droite */}
             <div className="flex flex-col gap-2 mb-3">
@@ -89,6 +102,10 @@ function EditTask() {
                     const userObj = users.find(u => u._id === memberId);
                     if (!userObj) return null;
                     const lastName = (userObj.LastName || userObj.lastName || '').toUpperCase();
+
+                    {/* === TON CONSOLE.LOG ICI === */ }
+                    console.log('Membre affiché :', userObj.firstName, lastName);
+
                     return (
                         <div key={memberId} className="max-w-md bg-gray-50 border border-gray-200 text-gray-800 text-sm px-4 py-2.5 rounded-xl flex justify-between items-center shadow-sm">
                             {/* Nom, prénom et email à gauche */}
@@ -186,7 +203,7 @@ function EditTask() {
             <small className="text-gray-500 block mb-2">Tapez un nom, puis cliquez dessus ou appuyez sur Entrée pour l'ajouter.</small>
             <br></br>
 
-            <button>Créer</button>
+            <button>Modifier</button>
         </form>
     )
 };
