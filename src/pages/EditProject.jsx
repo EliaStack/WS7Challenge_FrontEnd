@@ -14,7 +14,7 @@ function EditTask() {
     const [description, setDescription] = useState('');
     const [startAt, setStartAt] = useState('');
     const [endAt, setEndAt] = useState('');
-    const [status, setStatus] = useState('Actif');
+    const [status, setStatus] = useState('');
     const [owner, setOwner] = useState(`${project.owner.firstName} ${project.owner.lastName}`);
     const [members, setMembers] = useState([]);   // Pour stocker les IDs des membres sélectionnés
     const [projectId, setProjectId] = useState(location.state?.projectId || '');
@@ -60,6 +60,7 @@ function EditTask() {
     const handleSubmit = async (e) => {
         e.preventDefault(); //Evite le rechargement de la page
         try {
+            console.log("Objet complet envoyé :", { title, description, startAt, endAt, status, owner, members });
             //Appel API
             await patch('api/projet/' + project._id, { title, description, startAt, endAt, status, owner: project.owner, members })
             navigate('/projects', {
@@ -90,7 +91,7 @@ function EditTask() {
             <select
                 value={status} onChange={(e) => setStatus(e.target.value)} className="border border-gray-300 rounded px-3 py-2">
                 <option value="actif">Actif</option>
-                <option value="archiver">Archivé</option>
+                <option value="archivé">Archivé</option>
             </select>
             <br />
             <label>Créateur :</label>
