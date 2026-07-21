@@ -72,7 +72,7 @@ function Task({ task, onUpdate }) {
                 {task.status !== 'done' && (
                     <button className="bg-green-500 text-black hover:bg-green-600 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm" onClick={() => markAsFinished()}>Terminer</button>
                 )}
-                <Link className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center" to={`/edit/${task._id}`}>Modifier</Link>
+                <Link className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center" to={`/editTask/${task._id}`}>Modifier</Link>
                 <button className="bg-red-500 text-black hover:bg-red-600 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm" onClick={() => deleteTask()}>Supprimer</button>
             </div>
 

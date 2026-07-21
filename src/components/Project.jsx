@@ -6,7 +6,7 @@ function Project({ project, onUpdate }) {
     const token = localStorage.getItem('token');
     //Supprimer une tâche
     const deleteProject = async () => {
-        await axios.delete('http://localhost:3000/api/projet/' + project.id, {
+        await axios.delete('http://localhost:3000/api/projet/' + project._id, {
             headers: { Authorization: 'Bearer ' + token }
         });
         onUpdate();
@@ -15,7 +15,7 @@ function Project({ project, onUpdate }) {
     //Marquer une tâche comme fini
     const markAsFinished = async () => {
 
-        await axios.patch('http://localhost:3000/api/projet/' + project.id, { status: 'done' }, {
+        await axios.patch('http://localhost:3000/api/projet/' + project._id, { status: 'done' }, {
             headers: { Authorization: 'Bearer ' + token }
         });
         onUpdate();
@@ -24,7 +24,7 @@ function Project({ project, onUpdate }) {
     return (
         <div className="bg-gray-50 p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center">
 
-            {/* Colonne gauche : Remplacée par un Link pour le clic */}
+            {/* Colonne gauche*/}
             <Link to="/tasks" state={{ projectId: project._id,projectTitle:project.title}} className="flex-1 block hover:bg-gray-100/50 p-2 rounded-lg transition-colors cursor-pointer">
                 <div className="flex items-center gap-2 mb-2">
                     <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${project.status === 'Actif' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
@@ -40,7 +40,7 @@ function Project({ project, onUpdate }) {
                 </div>
             </Link>
 
-            {/* Colonne centrale : Boutons (PAS DE CLIC GLOBAL ICI) */}
+            {/* Colonne centrale*/}
             <div className="flex flex-col items-center justify-center gap-2 min-w-[120px]">
                 {project.status !== 'done' && (
                     <button
@@ -52,7 +52,7 @@ function Project({ project, onUpdate }) {
                 )}
                 <Link
                     className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center"
-                    to={`/edit/${project.id}`}
+                    to={`/editProject/${project.id}`}
                 >
                     Modifier
                 </Link>

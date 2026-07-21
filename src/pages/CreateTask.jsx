@@ -5,7 +5,7 @@ import { post } from "../services/api";
 
 
 
-function CreatTask() {
+function CreateTask() {
     const navigate = useNavigate();
     const location = useLocation();
     const projectId = location.state?.projectId;
@@ -77,4 +77,4 @@ function CreatTask() {
     )
 };
 
-export default CreatTask;
+export default CreateTask;

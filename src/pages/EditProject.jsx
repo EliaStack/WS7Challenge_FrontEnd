@@ -1,0 +1,195 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { get, patch } from "../services/api";
+
+
+function EditTask() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { id } = useParams();
+    const { token } = useAuth();
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [startAt, setStartAt] = useState('');
+    const [endAt, setEndAt] = useState('');
+    const [status, setStatus] = useState('Actif');
+    const [owner, setOwner] = useState('');
+
+    //Récupération de tout les users
+    const [users, setUsers] = useState([]);       // Pour stocker la liste de tous les utilisateurs du site
+    const [members, setMembers] = useState([]);   // Pour stocker les IDs des membres sélectionnés
+    const [searchTerm, setSearchTerm] = useState('');
+    //Récupération des users
+    useEffect(() => {
+        get('api/users/userGet')
+            .then(response => {
+                setUsers(response.data);
+            })
+            .catch(error => {
+                console.error("Erreur lors de la récupération des utilisateurs :", error);
+            });
+    }, []);
+
+
+    useEffect(() => {
+        get('api/task/' + id)
+            .then(response => {
+                setTitle(response.data.title);
+                setDescription(response.data.description);
+                setDueAt(response.data.dueAt ? response.data.dueAt.split('T')[0] : '');
+                setPriority(response.data.priority);
+                setStatus(response.data.status);
+                setComment(response.data.comment);
+
+                if (!projectId) {
+                    setProjectId(response.data.project?._id || response.data.project);
+                }
+            });
+    }, [id])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); //Evite le rechargement de la page
+        try {
+            //Appel API
+            await patch('api/task/' + id, { title, description, startAt, endAt, status, owner: assigneeId, members })
+            navigate('/tasks', {
+                state: {
+                    projectId: projectId
+                }
+            });
+        } catch (error) {
+            console.error("Erreur modification :", error);
+        }
+
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <h2 className="bg-blue-600 text-white text-xl font-semibold px-4 py-2 rounded mb-6 text-center">
+                Modifier un projet
+            </h2>
+            <label>Titre du projet :</label>
+            <input placeholder="Titre" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <label>Description du projet :</label>
+            <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+            <label>Date de création :</label>
+            <input type="date" value={startAt} onChange={(e) => setStartAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2" />
+            <label>Date d'échéance :</label>
+            <input type="date" value={endAt} onChange={(e) => setEndAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2" />
+            <label>Status :</label>
+            <input readOnly placeholder="Titre" value={status} onChange={(e) => setStatus(e.target.value)} />
+            <label>Créateur :</label>
+            <input readOnly placeholder="Créateur du projet" value={assigneeName} onChange={(e) => setAssignee(e.target.value)} />
+            <label className="block font-medium mb-1">Membres du projet :</label>
+            {/* Affichage des membres : nom/prénom à gauche et petite croix bleue cliquable tout à droite */}
+            <div className="flex flex-col gap-2 mb-3">
+                {members.map(memberId => {
+                    const userObj = users.find(u => u._id === memberId);
+                    if (!userObj) return null;
+                    const lastName = (userObj.LastName || userObj.lastName || '').toUpperCase();
+                    return (
+                        <div key={memberId} className="max-w-md bg-gray-50 border border-gray-200 text-gray-800 text-sm px-4 py-2.5 rounded-xl flex justify-between items-center shadow-sm">
+                            {/* Nom, prénom et email à gauche */}
+                            <div className="flex flex-col">
+                                <span className="font-semibold">
+                                    {lastName} {userObj.firstName}
+                                </span>
+                                <span className="text-gray-400 text-xs">
+                                    {userObj.email}
+                                </span>
+                            </div>
+
+                            {/* Petite croix bleue tout à droite (via un div pour échapper au style global des boutons) */}
+                            <div
+                                onClick={() => setMembers(members.filter(id => id !== memberId))}
+                                className="bg-blue-600 hover:bg-blue-700 text-w cursor-pointer w-7 h-7 rounded-full flex items-center justify-center transition shadow-sm shrink-0"
+                                title="Supprimer"
+                            >
+                                <svg className="w-3.5 h-3.5 text-white pointer-events-none" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+            {/* Input de recherche et suggestions */}
+            <div className="relative mb-2">
+                <input
+                    type="text"
+                    placeholder="Rechercher un membre (prénom ou nom)..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const filtered = users.filter(user => {
+                                if (!searchTerm.trim()) return false;
+                                const search = searchTerm.toLowerCase();
+                                const firstName = user.firstName?.toLowerCase() || '';
+                                // Sécurité pour gérer à la fois 'LastName' et 'lastName'
+                                const lastName = (user.LastName || user.lastName)?.toLowerCase() || '';
+                                return (firstName.includes(search) || lastName.includes(search)) && !members.includes(user._id);
+                            });
+                            if (filtered.length > 0) {
+                                setMembers([...members, filtered[0]._id]);
+                                setSearchTerm('');
+                            }
+                        }
+                    }}
+                    className="w-full border border-gray-300 rounded px-3 py-2"
+                />
+
+                {/* Liste déroulante des suggestions filtrées */}
+                {searchTerm.trim() !== '' && (
+                    <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded mt-1 max-h-60 overflow-y-auto shadow-lg">
+                        {users
+                            .filter(user => {
+                                const search = searchTerm.toLowerCase();
+                                const firstName = user.firstName?.toLowerCase() || '';
+                                const lastName = (user.LastName || user.lastName)?.toLowerCase() || '';
+                                return (firstName.includes(search) || lastName.includes(search)) && !members.includes(user._id);
+                            })
+                            .map(user => (
+                                <li
+                                    key={user._id}
+                                    onClick={() => {
+                                        setMembers([...members, user._id]);
+                                        setSearchTerm('');
+                                    }}
+                                    className="px-3 py-2 hover:bg-blue-50 cursor-pointer text-sm flex justify-between items-center border-b last:border-b-0"
+                                >
+                                    <div className="flex flex-col">
+                                        <span className="font-medium">{user.firstName} {user.LastName || user.lastName}</span>
+                                        <span className="text-gray-500 text-xs">{user.email}</span>
+                                    </div>
+                                    <span className="text-blue-500 text-xs font-bold">+ Ajouter</span>
+                                </li>
+                            ))}
+
+                        {/* Message si aucun utilisateur ne correspond */}
+                        {users.filter(user => {
+                            const search = searchTerm.toLowerCase();
+                            const firstName = user.firstName?.toLowerCase() || '';
+                            const lastName = (user.LastName || user.lastName)?.toLowerCase() || '';
+                            return (firstName.includes(search) || lastName.includes(search)) && !members.includes(user._id);
+                        }).length === 0 && (
+                                <li className="px-3 py-3 text-gray-500 text-sm italic text-center bg-gray-50">
+                                    Aucun utilisateur trouvé pour "{searchTerm}"
+                                </li>
+                            )}
+                    </ul>
+                )}
+            </div>
+            <small className="text-gray-500 block mb-2">Tapez un nom, puis cliquez dessus ou appuyez sur Entrée pour l'ajouter.</small>
+            <br></br>
+
+            <button>Créer</button>
+        </form>
+    )
+};
+
+
+export default EditTask;

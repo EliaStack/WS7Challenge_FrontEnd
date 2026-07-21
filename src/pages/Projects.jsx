@@ -9,6 +9,8 @@ function Projects() {
     const [projects, setProjects] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
 
+ const user = JSON.parse(localStorage.getItem('user'));
+
     const fetchProjects = async (page = 1) => {
 
         try {
@@ -32,7 +34,9 @@ function Projects() {
         <div>
             <div>
                 <h2>Mes projets</h2>
-                <Link className="inline-block mb-4 text-blue-600 underline" to="/create">
+                <Link className="inline-block mb-4 text-blue-600 underline" to="/createProject" state={{
+                            assigneeId: user._id,
+                            assigneeName: `${user.firstName} ${user.lastName}`}}>
                     + Nouveau projet
                 </Link>
 

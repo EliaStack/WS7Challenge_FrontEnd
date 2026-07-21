@@ -10,9 +10,11 @@ import Task from './pages/Tasks'
 import Project from './pages/Projects'
 import CreateTask from './pages/CreateTask'
 import EditTask from './pages/EditTask'
+import EditProject from './pages/EditProject'
 import PrivateRoute from './PrivateRoute'
 import Tags from './pages/Tags'
 import CreateTag from './pages/CreateTag'
+import CreateProject from './pages/CreateProject'
 
 
 
@@ -29,10 +31,12 @@ function App() {
             <Route path='/register' element={<Register></Register>}></Route>
             <Route path='/projects' element={<PrivateRoute><Project></Project></PrivateRoute>}></Route>
             <Route path='/tasks' element={<PrivateRoute><Task></Task></PrivateRoute>}></Route>
-            <Route path='/createTask' element={<PrivateRoute><CreateTask></CreateTask></PrivateRoute>}></Route>
-            <Route path='/edit/:id' element={<PrivateRoute><EditTask></EditTask></PrivateRoute>}></Route>
+            <Route path='/editTask/:id' element={<PrivateRoute><EditTask></EditTask></PrivateRoute>}></Route> {/*Pour modifier une tâche en cours*/}
+             <Route path='/editProject/:id' element={<PrivateRoute><EditProject></EditProject></PrivateRoute>}></Route> {/*Pour modifier un projet en cours*/}
             <Route path='/tags' element={<PrivateRoute><Tags></Tags></PrivateRoute>}> </Route>
+            <Route path='/createTask' element={<PrivateRoute><CreateTask></CreateTask></PrivateRoute>}></Route>
             <Route path='/createTag' element={<PrivateRoute><CreateTask></CreateTask></PrivateRoute>}></Route>
+            <Route path='/createProject' element={<PrivateRoute><CreateProject></CreateProject></PrivateRoute>}></Route>
           </Routes>
         </main>
         <Footer></Footer>
