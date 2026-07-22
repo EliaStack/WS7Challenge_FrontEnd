@@ -31,10 +31,9 @@ function EditTask() {
                 }
             });
     }, [id])
-        console.log('projectid:', projectId)
+
     const handleSubmit = async (e) => {
         e.preventDefault(); //Evite le rechargement de la page
-        console.log('projectid:', projectId)
         try {
             //Appel API
             await patch('api/tags/' + id, { name, project:projectId })

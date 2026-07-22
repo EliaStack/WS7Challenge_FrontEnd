@@ -13,7 +13,7 @@ function Tags() {
 
 
 
-    //Créer une tâche
+    //Créer un tag
     const CreateTag = async () => {
         console.log('tags.jsx-createTag 1');
         await axios.patch('http://localhost:3000/api/tags/tagCreate' + tag.id, {

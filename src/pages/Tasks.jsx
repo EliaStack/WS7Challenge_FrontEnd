@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Task from "../components/Task";
 import { get } from "../services/api";
 import { useLocation } from 'react-router-dom';
-import Tags from "../pages/Tags";
+//import Tags from "../pages/Tags";
 import Tag from "../components/Tag";
 
 
@@ -17,9 +17,6 @@ function Tasks() {
     //const assigneeName = location.state?.assigneeName;
 
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log('utilisateur', user);
-    console.log('titre du projet : ', projectTitle)
-
     const [tasks, setTasks] = useState([]);
     const [pagination, setPagination] = useState({ page: 1, totalPages: 1 });
 
@@ -65,7 +62,7 @@ function Tasks() {
         }
     };
 
-    // N'oubliez pas d'appeler fetchTasks dans le useEffect quand projectId change
+
     useEffect(() => {
         if (projectId) {
             fetchTasks();
@@ -91,7 +88,9 @@ function Tasks() {
                             + Nouvelle tâche
                         </Link>
                         {tasks.map((task) => (
-                            <Task key={task.id} task={task} onUpdate={() => fetchTasks(pagination.page)} />
+                            <Task key={task.id}
+                                task={task}
+                                onUpdate={() => fetchTasks(pagination.page)} />
                         ))}
                     </div>
 
@@ -128,7 +127,11 @@ function Tasks() {
                             + Nouveau commentaire
                         </Link>
                         {tags.map((tag) => (
-                            <Tag key={tag.id} tag={tag} onUpdate={() => fetchTags(tagsPagination.page)} />
+                            <Tag key={tag.id}
+                                tag={tag}
+                                tasks={tasks}
+                                onUpdate={() => fetchTags(tagsPagination.page)}
+                                onTaskUpdate={() => fetchTasks(pagination.page)} />
                         ))}
                     </div>
 
