@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { get, patch } from "../services/api";
 
@@ -15,12 +15,12 @@ function EditTask() {
     const [name, setName] = useState(tag?.name || '');
     const [projectId, setProjectId] = useState(tag?.project._id || '');
     const projectTitle = tag.project.title;
- 
+
 
     console.log('statetag: ', tag);
 
     useEffect(() => {
-        
+
         get('/api/tags/' + id)
             .then(response => {
                 console.log('Réponse brute API :', response);
@@ -36,10 +36,10 @@ function EditTask() {
         e.preventDefault(); //Evite le rechargement de la page
         try {
             //Appel API
-            await patch('api/tags/' + id, { name, project:projectId })
+            await patch('api/tags/' + id, { name, project: projectId })
             navigate('/tasks', {
                 state: {
-                   projectId: tag?.project?._id || tag?.project || projectId
+                    projectId: tag?.project?._id || tag?.project || projectId
                 }
             });
         } catch (error) {
@@ -49,16 +49,32 @@ function EditTask() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2 className="bg-blue-600 text-white text-xl font-semibold px-4 py-2 rounded mb-6 text-center">Modifier la tâche : {name} </h2>
+        <div className="max-w-2xl mx-auto px-4 py-6 md:px-0">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <h2 className="bg-blue-600 text-white text-xl font-semibold px-4 py-2 rounded mb-2 text-center">Modifier le tag : {name} </h2>
 
-            <label>Titre du tag :</label>
-            <input placeholder="Titre" value={name} onChange={(e) => setName(e.target.value)} />
-            <label>Projet :</label>
-            <input readOnly value={projectTitle} onChange={(e) => setProjectId(e.target.value)} className="border border-gray-300 rounded px-3 py-2" />
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold text-gray-700">Titre du tag :</label>
+                    <input placeholder="Titre" value={name} onChange={(e) => setName(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full" />
+                </div>
 
-            <button>Modifier</button>
-        </form>
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold text-gray-700">Projet :</label>
+                    <input readOnly value={projectTitle} className="border border-gray-300 rounded px-3 py-2 w-full bg-gray-100" />
+                </div>
+
+                <button className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold transition shadow-sm w-full">Modifier</button>
+            </form>
+            <div className="flex justify-center mt-4">
+                <Link
+                    to="/projects"
+                    className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-3 rounded-lg font-semibold transition shadow-sm w-full sm:w-auto text-center"
+                >
+                    ← Retour aux projets
+                </Link>
+            </div>
+        </div>
+
     )
 };
 

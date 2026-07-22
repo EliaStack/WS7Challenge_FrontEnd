@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { get, patch } from "../services/api";
 
@@ -51,33 +51,60 @@ function EditTask() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2 className="bg-blue-600 text-white text-xl font-semibold px-4 py-2 rounded mb-6 text-center">Modifier la tâche : {title} </h2>
+        <div className="max-w-2xl mx-auto px-4 py-6 md:px-0">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <h2 className="bg-blue-600 text-white text-xl font-semibold px-4 py-2 rounded mb-2 text-center">Modifier la tâche : {title} </h2>
 
-            <label>Titre de la tâche :</label>
-            <input placeholder="Titre" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <label>Description de la tâche :</label>
-            <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
-            <label>Date d'échéance :</label>
-            <input type="date" value={dueAt} onChange={(e) => setDueAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2" />
-            <label>Priorité de la tâche :</label>
-            <select value={priority} onChange={(e) => setPriority(e.target.value)} className="border border-gray-300 rounded px-3 py-2">
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-            </select>
-            <label>Status :</label>
-            <select
-                value={status} onChange={(e) => setStatus(e.target.value)} className="border border-gray-300 rounded px-3 py-2">
-                <option value="open">Open</option>
-                <option value="in_progress">In progress</option>
-            </select>
-            <br></br>
-            <label>Commentaires :</label>
-            <textarea placeholder="Description" value={comment} onChange={(e) => setComment(e.target.value)}></textarea>
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold text-gray-700">Titre de la tâche :</label>
+                    <input placeholder="Titre" value={title} onChange={(e) => setTitle(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full" />
+                </div>
 
-            <button>Modifier</button>
-        </form>
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold text-gray-700">Description de la tâche :</label>
+                    <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full min-h-[90px]"></textarea>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col gap-1 flex-1">
+                        <label className="text-sm font-semibold text-gray-700">Date d'échéance :</label>
+                        <input type="date" value={dueAt} onChange={(e) => setDueAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full" />
+                    </div>
+
+                    <div className="flex flex-col gap-1 flex-1">
+                        <label className="text-sm font-semibold text-gray-700">Priorité de la tâche :</label>
+                        <select value={priority} onChange={(e) => setPriority(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold text-gray-700">Status :</label>
+                    <select value={status} onChange={(e) => setStatus(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full">
+                        <option value="open">Open</option>
+                        <option value="in_progress">In progress</option>
+                    </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                    <label className="text-sm font-semibold text-gray-700">Commentaires :</label>
+                    <textarea placeholder="Description" value={comment} onChange={(e) => setComment(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full min-h-[90px]"></textarea>
+                </div>
+
+                <button className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold transition shadow-sm w-full">Modifier</button>
+            </form>
+            <div className="flex justify-center mt-4">
+                <Link
+                    to="/projects"
+                    className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-3 rounded-lg font-semibold transition shadow-sm w-full sm:w-auto text-center"
+                >
+                    ← Retour aux projets
+                </Link>
+            </div>
+        </div>
     )
 };
 

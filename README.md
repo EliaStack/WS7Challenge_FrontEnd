@@ -24,3 +24,10 @@ npm install --save-dev vitest @testing-library/react @testing-library/jest-dom j
 
 ## localhost
 http://localhost:5173/
+
+## Documentation Swagger
+
+Démarrer l'application puis ouvrir :
+
+```text
+http://localhost:3000/api-docs

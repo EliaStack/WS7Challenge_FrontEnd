@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { post, get } from "../services/api";
 
 
@@ -45,22 +45,44 @@ function CreateProject() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2 className="bg-blue-600 text-white text-xl font-semibold px-4 py-2 rounded mb-6 text-center">
+        <div className="max-w-2xl mx-auto px-4 py-6 md:px-0">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <h2 className="bg-blue-600 text-white text-xl font-semibold px-4 py-2 rounded mb-2 text-center">
                 Créer un projet
             </h2>
-            <label>Titre du projet :</label>
-            <input placeholder="Titre" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <label>Description du projet :</label>
-            <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
-            <label>Date de création :</label>
-            <input type="date" value={startAt} onChange={(e) => setStartAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2" />
-            <label>Date d'échéance :</label>
-            <input type="date" value={endAt} onChange={(e) => setEndAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2" />
-            <label>Status :</label>
-            <input readOnly placeholder="Titre" value={status} onChange={(e) => setStatus(e.target.value)} />
-            <label>Créateur :</label>
-            <input readOnly placeholder="Créateur du projet" value={assigneeName} onChange={(e) => setAssignee(e.target.value)} />
+
+            <div className="flex flex-col gap-1">
+                <label className="text-sm font-semibold text-gray-700">Titre du projet :</label>
+                <input placeholder="Titre" value={title} onChange={(e) => setTitle(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full" />
+            </div>
+
+            <div className="flex flex-col gap-1">
+                <label className="text-sm font-semibold text-gray-700">Description du projet :</label>
+                <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full min-h-[90px]"></textarea>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col gap-1 flex-1">
+                    <label className="text-sm font-semibold text-gray-700">Date de création :</label>
+                    <input type="date" value={startAt} onChange={(e) => setStartAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full" />
+                </div>
+                <div className="flex flex-col gap-1 flex-1">
+                    <label className="text-sm font-semibold text-gray-700">Date d'échéance :</label>
+                    <input type="date" value={endAt} onChange={(e) => setEndAt(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full" />
+                </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col gap-1 flex-1">
+                    <label className="text-sm font-semibold text-gray-700">Status :</label>
+                    <input readOnly placeholder="Titre" value={status} className="border border-gray-300 rounded px-3 py-2 w-full bg-gray-100" />
+                </div>
+                <div className="flex flex-col gap-1 flex-1">
+                    <label className="text-sm font-semibold text-gray-700">Créateur :</label>
+                    <input readOnly placeholder="Créateur du projet" value={assigneeName} className="border border-gray-300 rounded px-3 py-2 w-full bg-gray-100" />
+                </div>
+            </div>
+
             <label className="block font-medium mb-1">Membres du projet :</label>
             {/* Affichage des membres : nom/prénom à gauche et petite croix bleue cliquable tout à droite */}
             <div className="flex flex-col gap-2 mb-3">
@@ -165,16 +187,17 @@ function CreateProject() {
             <small className="text-gray-500 block mb-2">Tapez un nom, puis cliquez dessus ou appuyez sur Entrée pour l'ajouter.</small>
             <br></br>
 
-            <button>Créer</button>
-            <div className="flex justify-center mt-8">
+            <button className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold transition shadow-sm w-full">Créer</button>
+            <div className="flex justify-center mt-4">
                 <Link
                     to="/projects"
-                    className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-3 rounded-lg font-semibold transition shadow-sm"
+                    className="bg-blue-500 text-white hover:bg-blue-600 px-6 py-3 rounded-lg font-semibold transition shadow-sm w-full sm:w-auto text-center"
                 >
                     ← Retour aux projets
                 </Link>
             </div>
         </form>
+        </div>
     )
 };
 

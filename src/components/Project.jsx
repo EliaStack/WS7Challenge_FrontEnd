@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Project({ project, onUpdate }) {
     const token = localStorage.getItem('token');
-    //Supprimer une tâche
+
     const deleteProject = async () => {
         await axios.delete('http://localhost:3000/api/projet/' + project._id, {
             headers: { Authorization: 'Bearer ' + token }
@@ -12,9 +12,7 @@ function Project({ project, onUpdate }) {
         onUpdate();
     };
 
-    //Marquer une tâche comme fini
     const markAsFinished = async () => {
-
         await axios.patch('http://localhost:3000/api/projet/' + project._id, { status: 'archivé' }, {
             headers: { Authorization: 'Bearer ' + token }
         });
@@ -22,10 +20,10 @@ function Project({ project, onUpdate }) {
     }
 
     return (
-        <div key={project._id} className="bg-gray-50 p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center">
+        <div key={project._id} className="bg-gray-50 p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex flex-col md:flex-row gap-4 md:items-center">
 
-            {/* Colonne gauche*/}
-            <Link to="/tasks" state={{ projectId: project._id, projectTitle: project.title }} className="flex-1 block hover:bg-gray-100/50 p-2 rounded-lg transition-colors cursor-pointer">
+            {/* Colonne gauche */}
+            <Link to="/tasks" state={{ projectId: project._id, projectTitle: project.title }} className="flex-1 block hover:bg-gray-100/50 p-2 rounded-lg transition-colors cursor-pointer min-w-0">
                 <div className="flex items-center gap-2 mb-2">
                     <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide ${project.status?.trim().toLowerCase() === 'actif'
                             ? 'bg-green-100 text-green-800'
@@ -47,25 +45,27 @@ function Project({ project, onUpdate }) {
                 </div>
             </Link>
 
-            {/* Colonne centrale*/}
-            <div className="flex flex-col items-center justify-center gap-2 min-w-[120px]">
+            {/* Colonne centrale : boutons */}
+            <div className={`grid gap-2 w-full md:grid-cols-1 md:w-auto md:min-w-[120px] ${
+                project.status !== 'archivé' ? 'grid-cols-3' : 'grid-cols-2'
+            }`}>
                 {project.status !== 'archivé' && (
                     <button
-                        className="bg-green-500 text-black hover:bg-green-600 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm"
+                        className="bg-green-500 text-black hover:bg-green-600 px-2 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase transition w-full shadow-sm"
                         onClick={(e) => { e.stopPropagation(); markAsFinished(); }}
                     >
                         Terminer
                     </button>
                 )}
                 <Link
-                    className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center"
+                    className="bg-orange-400 text-black hover:bg-orange-500 px-2 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase transition w-full shadow-sm text-center"
                     to={`/editProject/${project._id}`}
                     state={{ project: project }}
                 >
                     Modifier
                 </Link>
                 <button
-                    className="bg-red-500 text-black hover:bg-red-600 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm"
+                    className="bg-red-500 text-black hover:bg-red-600 px-2 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase transition w-full shadow-sm"
                     onClick={(e) => { e.stopPropagation(); deleteProject(); }}
                 >
                     Supprimer
@@ -73,8 +73,8 @@ function Project({ project, onUpdate }) {
             </div>
 
             {/* Colonne droite : Responsables */}
-            <div className="flex items-center gap-4 border-l border-gray-300 pl-4 min-w-[150px]">
-                <div className="flex flex-col text-right">
+            <div className="flex items-center gap-4 border-t md:border-t-0 md:border-l border-gray-300 pt-4 md:pt-0 md:pl-4 w-full md:min-w-[150px] md:w-auto">
+                <div className="flex flex-col text-left md:text-right w-full">
                     <span className="text-xs font-bold text-black uppercase tracking-wide">Responsable :</span>
                     <span className="text-sm font-semibold text-gray-800 mb-2">
                         {project.owner ? `${project.owner.firstName} ${project.owner.lastName}` : 'Non assigné'}

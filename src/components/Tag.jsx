@@ -33,10 +33,10 @@ function Tag({ tag, tasks, onUpdate, onTaskUpdate }) {
     };
 
     return (
-        <div className="bg-white p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex gap-4 items-center relative">
+        <div className="bg-white p-5 rounded-xl border border-gray-400 border-l-[6px] border-l-blue-600 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all duration-300 mb-6 flex flex-col md:flex-row gap-4 md:items-center relative">
 
             {/* Colonne gauche */}
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
                 <div className="bg-gray-50 p-3 rounded-lg border border-gray-100 text-sm italic text-gray-700">
                     <p className="mb-1">• {tag.name}</p>
                     {Array.isArray(tag.comments) && tag.comments.map((c, i) => (
@@ -45,15 +45,15 @@ function Tag({ tag, tasks, onUpdate, onTaskUpdate }) {
                 </div>
             </div>
 
-            <div>
+            <div className="w-full md:w-auto">
                 {/* Colonne centrale : Boutons */}
-                <div className="flex flex-col items-center justify-center gap-2 min-w-[120px]">
-                    <Link className="bg-orange-400 text-black hover:bg-orange-500 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm text-center" to={`/editTag/${tag._id}`} state={{ tag: tag }}>Modifier</Link>
-                    <button className="bg-red-500 text-black hover:bg-red-600 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm" onClick={() => deleteTag()}>Supprimer</button>
+                <div className="grid grid-cols-2 md:flex md:flex-col items-stretch justify-center gap-2 w-full md:min-w-[120px]">
+                    <Link className="bg-orange-400 text-black hover:bg-orange-500 px-2 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase transition w-full shadow-sm text-center" to={`/editTag/${tag._id}`} state={{ tag: tag }}>Modifier</Link>
+                    <button className="bg-red-500 text-black hover:bg-red-600 px-2 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase transition w-full shadow-sm" onClick={() => deleteTag()}>Supprimer</button>
 
                     {/* Sélecteur de tâche + bouton Associer */}
                     <select
-                        className="border border-gray-300 rounded-lg px-2 py-2 text-xs w-full"
+                        className="col-span-2 md:col-auto border border-gray-300 rounded-lg px-2 py-2 text-xs w-full"
                         value={selectedTaskId}
                         onChange={(e) => setSelectedTaskId(e.target.value)}
                     >
@@ -66,7 +66,7 @@ function Tag({ tag, tasks, onUpdate, onTaskUpdate }) {
                     </select>
 
                     <button
-                        className="bg-violet-600 text-white hover:bg-violet-700 px-4 py-2 rounded-lg text-xs font-bold uppercase transition w-full shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="col-span-2 md:col-auto bg-violet-600 text-white hover:bg-violet-700 px-2 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-bold uppercase transition w-full shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
                         onClick={() => associateTag()}
                         disabled={!selectedTaskId}
                     >

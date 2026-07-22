@@ -74,10 +74,10 @@ function Tasks() {
 
     return (
         <div>
-            <div className="flex gap-8">
+            <div className="flex flex-col lg:flex-row gap-8">
                 {/*TASKS*/}
-                <div>
-                    <div className="flex-1 pr-6 border-r border-gray-300">
+                <div className="flex-1 min-w-0">
+                    <div className="pb-6 lg:pb-0 lg:pr-6 border-b lg:border-b-0 lg:border-r border-gray-300">
                         <h2>Mes Tâches :</h2>
                         <Link className="inline-block mb-4 text-blue-600 underline" to="/createTask" state={{
                             projectId: projectId,
@@ -117,7 +117,7 @@ function Tasks() {
                 </div>
 
                 {/*TAGS*/}
-                <div className="w-[400px] pl-6">
+                <div className="w-full lg:w-[400px] lg:pl-6">
                     <div>
                         <h2>Commentaire du projet :</h2>
                         <Link className="inline-block mb-4 text-blue-600 underline" to="/createTag" state={{
