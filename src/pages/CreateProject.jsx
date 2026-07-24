@@ -75,7 +75,7 @@ function CreateProject() {
             <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex flex-col gap-1 flex-1">
                     <label className="text-sm font-semibold text-gray-700">Status :</label>
-                    <input readOnly placeholder="Titre" value={status} className="border border-gray-300 rounded px-3 py-2 w-full bg-gray-100" />
+                    <input readOnly placeholder="Status" value={status} className="border border-gray-300 rounded px-3 py-2 w-full bg-gray-100" />
                 </div>
                 <div className="flex flex-col gap-1 flex-1">
                     <label className="text-sm font-semibold text-gray-700">Créateur :</label>

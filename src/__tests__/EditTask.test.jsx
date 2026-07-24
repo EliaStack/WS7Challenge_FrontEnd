@@ -1,12 +1,24 @@
 /** @vitest-environment jsdom */  
-import { MemoryRouter, useNavigate } from "react-router-dom";
-import CreateTask from "../pages/CreateTask";
+import { MemoryRouter } from "react-router-dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import EditTask from "../pages/EditTask";
 
-const mockPost = vi.fn();
+const mockPatch = vi.fn();
+const mockGet = vi.fn().mockResolvedValue({
+    data: {
+        title: "Ancienne tâche",
+        description: "Ancienne description",
+        dueAt: "",
+        priority: "Low",
+        status: "open",
+        comment: "",
+        project: "proj123",
+    }
+});
 vi.mock('../services/api.js', () => ({
-    post: (...args) => mockPost(...args)
+    patch: (...args) => mockPatch(...args),
+    get: (...args) => mockGet(...args),
 }))
 
 const mockNavigate = vi.fn();
@@ -15,19 +27,27 @@ vi.mock('react-router-dom', async () => {
     return {
         ...actual,
         useNavigate: () => mockNavigate,
+        useParams: () => ({ id: 'task123' }),
     }
 })
 
-describe("CreateTask", () => {
+vi.mock('../context/AuthContext', () => ({
+    useAuth: () => ({ token: 'fake-token' })
+}))
+
+describe("EditTask", () => {
     it('Soumet le formulaire avec les bonnes valeurs', async () => {
-        render(<CreateTask></CreateTask>, { wrapper: MemoryRouter });
+        render(<EditTask></EditTask>, { wrapper: MemoryRouter });
+
+        // Attendre que les données initiales soient chargées avant d'interagir
+        await screen.findByDisplayValue("Ancienne tâche");
 
         fireEvent.change(screen.getByPlaceholderText("Titre"), {
-            target: { value: "Nouvelle tâche" },
+            target: { value: "Tâche modifiée" },
         });
 
         fireEvent.change(screen.getByPlaceholderText("Description"), {
-            target: { value: "Contenu de la description" },
+            target: { value: "Nouvelle description" },
         });
 
         fireEvent.change(screen.getByPlaceholderText("Priority"), {
@@ -38,24 +58,22 @@ describe("CreateTask", () => {
             target: { value: "in_progress" },
         });
 
-        fireEvent.click(screen.getByText("Créer"));
+        fireEvent.click(screen.getByText("Modifier"));
 
         await waitFor(() => {
-            expect(mockPost).toHaveBeenCalledWith('api/task/taskCreate', {
-                title: "Nouvelle tâche",
-                description: "Contenu de la description",
+            expect(mockPatch).toHaveBeenCalledWith('api/task/task123', {
+                title: "Tâche modifiée",
+                description: "Nouvelle description",
                 dueAt: "",
                 priority: "Medium",
                 status: "in_progress",
-                project: undefined,
-                assignee: undefined,
                 comment: "",
             });
         });
 
         await waitFor(() => {
             expect(mockNavigate).toHaveBeenCalledWith('/tasks', {
-                state: { projectId: undefined },
+                state: { projectId: "proj123" },
             });
         });
     });

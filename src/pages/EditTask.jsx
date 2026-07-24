@@ -73,7 +73,7 @@ function EditTask() {
 
                     <div className="flex flex-col gap-1 flex-1">
                         <label className="text-sm font-semibold text-gray-700">Priorité de la tâche :</label>
-                        <select value={priority} onChange={(e) => setPriority(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full">
+                        <select placeholder="Priority" value={priority} onChange={(e) => setPriority(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full">
                             <option value="Low">Low</option>
                             <option value="Medium">Medium</option>
                             <option value="High">High</option>
@@ -83,7 +83,7 @@ function EditTask() {
 
                 <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold text-gray-700">Status :</label>
-                    <select value={status} onChange={(e) => setStatus(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full">
+                    <select placeholder="Status" value={status} onChange={(e) => setStatus(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full">
                         <option value="open">Open</option>
                         <option value="in_progress">In progress</option>
                     </select>
@@ -91,7 +91,7 @@ function EditTask() {
 
                 <div className="flex flex-col gap-1">
                     <label className="text-sm font-semibold text-gray-700">Commentaires :</label>
-                    <textarea placeholder="Description" value={comment} onChange={(e) => setComment(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full min-h-[90px]"></textarea>
+                    <textarea placeholder="Comment" value={comment} onChange={(e) => setComment(e.target.value)} className="border border-gray-300 rounded px-3 py-2 w-full min-h-[90px]"></textarea>
                 </div>
 
                 <button className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold transition shadow-sm w-full">Modifier</button>

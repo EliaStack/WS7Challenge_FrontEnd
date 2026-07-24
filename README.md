@@ -21,6 +21,7 @@ npm install axios
 
 ## npm install Test
 npm install --save-dev vitest @testing-library/react @testing-library/jest-dom jsdom
+npm run test
 
 ## localhost
 http://localhost:5173/
